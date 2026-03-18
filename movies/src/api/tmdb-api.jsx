@@ -22,6 +22,14 @@ export const getMovies = () => {
       .then(json => json.genres);
   };
   
+  export const getOriginCountry = () => {
+    return fetch(
+      `https://api.themoviedb.org/3/credit/\${origin_country}?api_key=\$${import.meta.env.VITE_TMDB_KEY}&language=en-US`
+    )
+      .then(res => res.json())
+      .then(json => json.origin_country);
+  };
+
   export const getMovieImages = (id) => {
     return fetch(
       `https://api.themoviedb.org/3/movie/${id}/images?api_key=${import.meta.env.VITE_TMDB_KEY}`
