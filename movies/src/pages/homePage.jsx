@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";  
+import React, {useState, useEffect}  from "react";
 import MovieList from "../components/movieList";
 import Grid from "@mui/material/Grid";
 import Header from '../components/headerMovieList';
@@ -25,6 +25,7 @@ const HomePage = (props) => {
     if (type === "name") setNameFilter(value);
     else setGenreFilter(value);
   };
+
 
   useEffect(() => {
     fetch(
