@@ -1,31 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from 'react-router';
-import MovieReviews from "../components/movieReviews/";
+import React from "react";
+import { useLocation } from "react-router";
 import PageTemplate from "../components/templateMoviePage";
-import { getMovie } from "../api/tmdb-api";
+import MovieReview from "../components/movieReview";
 
 const MovieReviewPage = (props) => {
-  const { id } = useParams();
-  const [movie, setMovie] = useState(null);
-
-  useEffect(() => {
-    getMovie(id).then((movie) => {
-      setMovie(movie);
-    });
-  }, [id]);
-
+  let location = useLocation();
+  const {movie, review} = location.state;
+  
   return (
-    <>
-      {movie ? (
-        <>
-          <PageTemplate movie={movie}>
-            <MovieReviews movie={movie} />
-          </PageTemplate>
-        </>
-      ) : (
-        <p>Waiting for movie reviews</p>
-      )}
-    </>
+    <PageTemplate movie={movie}>
+      <MovieReview review={review} />
+    </PageTemplate>
   );
 };
 
