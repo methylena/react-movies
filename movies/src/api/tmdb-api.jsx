@@ -60,7 +60,6 @@ export const getMovie = (args) => {
    });
   };
 
-
   export const getOriginCountry = () => {
     return fetch(
       `https://api.themoviedb.org/3/credit/\${origin_country}?api_key=\$${import.meta.env.VITE_TMDB_KEY}&language=en-US`
