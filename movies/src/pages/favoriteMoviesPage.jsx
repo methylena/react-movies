@@ -48,7 +48,6 @@ const FavoriteMoviesPage = () => {
       }}
     />
   );
-
 };
 
 export default FavoriteMoviesPage;

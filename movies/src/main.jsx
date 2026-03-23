@@ -16,7 +16,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 360000,
-      refetchInterval: 360000, 
+      refetchInterval: 360000,
       refetchOnWindowFocus: false
     },
   },
@@ -28,15 +28,15 @@ const App = () => {
       <BrowserRouter>
         <SiteHeader />
         <MoviesContextProvider>
-        <Routes>
-  <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
-  <Route path="/upcomingMovies" element={<UpcomingMoviesPage />} />  {/* moved up */}
-  <Route path="/movies/:id" element={<MoviePage />} />
-  <Route path="/reviews/:id" element={<MovieReviewPage />} />
-  <Route path="/reviews/form" element={<AddMovieReviewPage />} />
-  <Route path="/" element={<HomePage />} />
-  <Route path="*" element={<Navigate to="/" />} />
-</Routes>
+          <Routes>
+            <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
+            <Route path="/upcomingMovies" element={<UpcomingMoviesPage />} />  {/* moved up */}
+            <Route path="/movies/:id" element={<MoviePage />} />
+            <Route path="/reviews/:id" element={<MovieReviewPage />} />
+            <Route path="/reviews/form" element={<AddMovieReviewPage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
         </MoviesContextProvider>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
@@ -45,5 +45,5 @@ const App = () => {
 };
 
 
-const rootElement = createRoot( document.getElementById("root") )
+const rootElement = createRoot(document.getElementById("root"))
 rootElement.render(<App />);
