@@ -16,6 +16,18 @@ const MoviesContextProvider = (props) => {
     setFavorites(newFavorites)
   };
   
+  const [playlist, setPlaylist] = useState( [] )
+
+  const addToPlaylist = (movie) => {
+    let newPlaylist = [];
+    if (!playlist.includes(movie.id)){
+      newPlaylist = [...playlist, movie.id];
+    }
+    else{
+        newPlaylist = [...playlist];
+    }
+    setPlaylist(newPlaylist)
+  };
   // We will use this function in the next step
   const removeFromFavorites = (movie) => {
     setFavorites( favorites.filter(
@@ -33,9 +45,11 @@ const MoviesContextProvider = (props) => {
     <MoviesContext.Provider
       value={{
         favorites,
+        playlist,
         addToFavorites,
         removeFromFavorites,
         addReview,
+        addToPlaylist,
       }}
     >
       {props.children}

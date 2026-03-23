@@ -15,6 +15,8 @@ import img from '../../images/film-poster-placeholder.png'
 import { Link } from "react-router";
 import Avatar from '@mui/material/Avatar';
 import { MoviesContext } from "../../contexts/moviesContext";
+import PlaylistIcon from '@mui/icons-material/PlaylistAdd';
+import Box from "@mui/material/Box";
 
 export default function MovieCard({ movie, action }) {
   const { favorites, addToFavorites } = useContext(MoviesContext);
@@ -30,24 +32,41 @@ export default function MovieCard({ movie, action }) {
     addToFavorites(movie);
   };
 
+  const { playlist, addToPlaylist } = useContext(MoviesContext);
 
+  if (playlist.find((id) => id === movie.id)) {
+    movie.playlist = true;
+  } else {
+    movie.playlist = false
+  }
+  const handleAddToPlaylist = (e) => {
+    e.preventDefault();
+    addToPlaylist(movie);
+  };
   return (
     <Card>
       {/* <CardHeader title={movie.title} sx={{ textWrap: "nowrap"}}/> */}
       <CardHeader
-        avatar={
-          movie.favorite ? (
-            <Avatar sx={{ backgroundColor: 'red' }}>
-              <FavoriteIcon />
-            </Avatar>
-          ) : null
-        }
-        title={
-          <Typography variant="h5" component="p">
-            {movie.title}{" "}
-          </Typography>
-        }
-      />
+  avatar={
+    <Box sx={{ display: 'flex', gap: 1 }}>
+      {movie.favorite && (
+        <Avatar sx={{ backgroundColor: 'red' }}>
+          <FavoriteIcon />
+        </Avatar>
+      )}
+      {movie.playlist && (
+        <Avatar sx={{ backgroundColor: 'blue' }}>
+          <PlaylistIcon />
+        </Avatar>
+      )}
+    </Box>
+  }
+  title={
+    <Typography variant="h5" component="p">
+      {movie.title}
+    </Typography>
+  }
+/>
 
       <CardMedia
         sx={{ height: 500 }}
