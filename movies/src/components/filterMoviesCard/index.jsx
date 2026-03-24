@@ -10,8 +10,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import img from '../../images/pexels-dziana-hasanbekava-5480827.jpg'
-import { getGenres } from "../../api/tmdb-api";
-import { useQuery } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
+import { getGenres, getCast } from "../../api/tmdb-api";
 import Spinner from '../spinner';
 
 const formControl = 
@@ -23,22 +23,24 @@ const formControl =
 
 export default function FilterMoviesCard(props) {
 
-  const { data, error, isPending, isError } = useQuery({
-    queryKey: ['genres'],
-    queryFn: getGenres,
+  const results = useQueries({
+    queries: [
+      { queryKey: ['genres'], queryFn: getGenres },
+    
+    ]
   });
-
-  if (isPending) {
-    return <Spinner />;
-  }
-
-  if (isError) {
-    return <h1>{error.message}</h1>;
-  }
-  const genres = data.genres;
-  if (genres[0].name !== "All"){
+  
+  const isPending = results.some((r) => r.isPending);
+  const isError = results.some((r) => r.isError);
+  
+  if (isPending) return <Spinner />;
+  if (isError) return <h1>Error loading data</h1>;
+  
+  const genres = results[0].data.genres;
+  if (genres[0].name !== "All") {
     genres.unshift({ id: "0", name: "All" });
   }
+  
 
   const handleChange = (e, type, value) => {
     e.preventDefault();
@@ -58,12 +60,12 @@ export default function FilterMoviesCard(props) {
   return (
     <Card 
       sx={{
-        backgroundColor: "rgb(204, 204, 0)"
+        backgroundColor: "rgb(229, 211, 238)"
       }} 
       variant="outlined">
       <CardContent>
-        <Typography variant="h5" component="h1">
-          <SearchIcon fontSize="large" />
+        <Typography variant="h6" component="h4">
+          <SearchIcon fontSize="medium" />
           Filter the movies.
         </Typography>
         <TextField
