@@ -27,6 +27,7 @@ const MoviesContextProvider = (props) => {
         newPlaylist = [...playlist];
     }
     setPlaylist(newPlaylist)
+    console.log("Playlist: ", newPlaylist);
   };
   // We will use this function in the next step
   const removeFromFavorites = (movie) => {
