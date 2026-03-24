@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext  } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -14,32 +14,59 @@ import Grid from "@mui/material/Grid";
 import img from '../../images/film-poster-placeholder.png'
 import { Link } from "react-router";
 import Avatar from '@mui/material/Avatar';
+import { MoviesContext } from "../../contexts/moviesContext";
+import PlaylistIcon from '@mui/icons-material/PlaylistAdd';
+import Box from "@mui/material/Box";
 
-export default function MovieCard(props) {
-  const movie = props.movie;
+export default function MovieCard({ movie, action }) {
+  const { favorites, addToFavorites } = useContext(MoviesContext);
+
+  if (favorites.find((id) => id === movie.id)) {
+    movie.favorite = true;
+  } else {
+    movie.favorite = false
+  }
 
   const handleAddToFavorite = (e) => {
     e.preventDefault();
-    props.selectFavorite(movie.id);
+    addToFavorites(movie);
   };
 
+  const { playlist, addToPlaylist } = useContext(MoviesContext);
+
+  if (playlist.find((id) => id === movie.id)) {
+    movie.playlist = true;
+  } else {
+    movie.playlist = false
+  }
+  const handleAddToPlaylist = (e) => {
+    e.preventDefault();
+    addToPlaylist(movie);
+  };
   return (
     <Card>
       {/* <CardHeader title={movie.title} sx={{ textWrap: "nowrap"}}/> */}
       <CardHeader
-        avatar={
-          movie.favorite ? (
-            <Avatar sx={{ backgroundColor: 'red' }}>
-              <FavoriteIcon />
-            </Avatar>
-          ) : null
-        }
-        title={
-          <Typography variant="h5" component="p">
-            {movie.title}{" "}
-          </Typography>
-        }
-      />
+  avatar={
+    <Box sx={{ display: 'flex', gap: 1 }}>
+      {movie.favorite && (
+        <Avatar sx={{ backgroundColor: 'red' }}>
+          <FavoriteIcon />
+        </Avatar>
+      )}
+      {movie.playlist && (
+        <Avatar sx={{ backgroundColor: 'blue' }}>
+          <PlaylistIcon />
+        </Avatar>
+      )}
+    </Box>
+  }
+  title={
+    <Typography variant="h5" component="p">
+      {movie.title}
+    </Typography>
+  }
+/>
 
       <CardMedia
         sx={{ height: 500 }}
@@ -66,16 +93,14 @@ export default function MovieCard(props) {
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
-      <IconButton aria-label="add to favorites" onClick={null}>
-      <FavoriteIcon color="primary" fontSize="large" />
-    </IconButton>
-
-        <Link to={`/movies/${movie.id}`}>
-          <Button variant="outlined" size="medium" color="primary">
-            More Info ...
-          </Button>
-        </Link>
-      </CardActions>
+      {action(movie)}
+      <Link to={`/movies/${movie.id}`}>
+        <Button variant="outlined" size="medium" color="primary">
+          More Info ...
+        </Button>
+      </Link>
+    
+    </CardActions>
     </Card>
   );
 }
