@@ -6,9 +6,10 @@ const MoviesContextProvider = (props) => {
   const [favorites, setFavorites] = useState( [] )
 
   const addToFavorites = (movie) => {
+    const mediaType = movie.media_type || movie.mediaType || "movie";
     let newFavorites = [];
-    if (!favorites.includes(movie.id)){
-      newFavorites = [...favorites, movie.id];
+    if (!favorites.find((item) => item.id === movie.id && item.mediaType === mediaType)){
+      newFavorites = [...favorites, { id: movie.id, mediaType }];
     }
     else{
       newFavorites = [...favorites];
@@ -31,8 +32,9 @@ const MoviesContextProvider = (props) => {
   };
   // We will use this function in the next step
   const removeFromFavorites = (movie) => {
+    const mediaType = movie.media_type || movie.mediaType || "movie";
     setFavorites( favorites.filter(
-      (mId) => mId !== movie.id
+      (item) => !(item.id === movie.id && item.mediaType === mediaType)
     ) )
   };
   const [myReviews, setMyReviews] = useState( {} ) 

@@ -1,17 +1,17 @@
 import React from "react";
-import MovieHeader from "../headerMovie";
 import Grid from "@mui/material/Grid";
-import { getMovieImages } from "../../api/tmdb-api";
 import { useQuery } from "@tanstack/react-query";
-import Spinner from '../spinner'
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import Spinner from "../spinner";
 import img from "../../images/film-poster-placeholder.png";
+import MovieHeader from "../headerMovie";
+import { getTVShowImages } from "../../api/tmdb-api";
 
-const TemplateMoviePage = ({ movie, children }) => {
+const TemplateTVShowPage = ({ tvShow, children }) => {
   const { data, error, isPending, isError } = useQuery({
-    queryKey: ['images', { id: movie.id }],
-    queryFn: getMovieImages,
+    queryKey: ["tvImages", { id: tvShow.id }],
+    queryFn: getTVShowImages,
   });
 
   if (isPending) {
@@ -21,17 +21,22 @@ const TemplateMoviePage = ({ movie, children }) => {
   if (isError) {
     return <h1>{error.message}</h1>;
   }
-  
+
   const poster = data.posters?.[0]?.file_path
     ? `https://image.tmdb.org/t/p/w500/${data.posters[0].file_path}`
-    : movie.poster_path
-      ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+    : tvShow.poster_path
+      ? `https://image.tmdb.org/t/p/w500/${tvShow.poster_path}`
       : img;
 
+  const headerShow = {
+    ...tvShow,
+    title: tvShow.name,
+    tagline: tvShow.tagline,
+  };
 
   return (
     <Box sx={{ backgroundColor: "#fdf1f5", minHeight: "100vh" }}>
-      <MovieHeader movie={movie} />
+      <MovieHeader movie={headerShow} />
 
       <Grid container spacing={4} sx={{ p: 3 }}>
         <Grid size={{xs: 12, md: 3}}>
@@ -39,7 +44,7 @@ const TemplateMoviePage = ({ movie, children }) => {
             <Box
               component="img"
               src={poster}
-              alt={movie.title}
+              alt={tvShow.name}
               sx={{
                 display: "block",
                 width: "100%",
@@ -60,4 +65,4 @@ const TemplateMoviePage = ({ movie, children }) => {
   );
 };
 
-export default TemplateMoviePage;
+export default TemplateTVShowPage;

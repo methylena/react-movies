@@ -1,6 +1,5 @@
-import React, {useState, useEffect}  from "react";
+import React from "react";
 import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
@@ -9,16 +8,15 @@ import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import img from '../../images/pexels-dziana-hasanbekava-5480827.jpg'
+import Box from "@mui/material/Box";
 import { useQueries } from '@tanstack/react-query';
-import { getGenres, getCast } from "../../api/tmdb-api";
+import { getGenres } from "../../api/tmdb-api";
 import Spinner from '../spinner';
 
 const formControl = 
   {
-    margin: 1,
-    minWidth: "90%",
-    backgroundColor: "rgb(255, 255, 255)"
+    width: "100%",
+    backgroundColor: "#ffffff"
   };
 
 export default function FilterMoviesCard(props) {
@@ -47,7 +45,7 @@ export default function FilterMoviesCard(props) {
     props.onUserInput(type, value); 
   };
 
-  const handleTextChange = (e, props) => {
+  const handleTextChange = (e) => {
     handleChange(e, "name", e.target.value);
   };
 
@@ -55,59 +53,82 @@ export default function FilterMoviesCard(props) {
     handleChange(e, "genre", e.target.value);
   };
 
+  const handleCountryChange = (e) => {
+    handleChange(e, "country", e.target.value);
+  };
+
 
       
   return (
     <Card 
       sx={{
-        backgroundColor: "rgb(229, 211, 238)"
+        width: "100%",
+        maxWidth: 260,
+        margin: 0,
+        backgroundColor: "#ffffff",
+        border: "1px solid #e7c2cf",
+        minHeight: 420,
       }} 
       variant="outlined">
-      <CardContent>
-        <Typography variant="h6" component="h4">
-          <SearchIcon fontSize="medium" />
-          Filter the movies.
-        </Typography>
-        <TextField
-      sx={{...formControl}}
-      id="filled-search"
-      label="Search field"
-      type="search"
-      variant="filled"
-      value={props.titleFilter}
-      onChange={handleTextChange}
-    />
-        <FormControl sx={{...formControl}}>
-          <InputLabel id="genre-label">Genre</InputLabel>
-          <Select
-    labelId="genre-label"
-    id="genre-select"
-    defaultValue=""
-    value={props.genreFilter}
-    onChange={handleGenreChange}
-  >
-
-            {genres.map((genre) => {
-              return (
-                <MenuItem key={genre.id} value={genre.id}>
-                  {genre.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
-      </CardContent>
-      <CardMedia
-        sx={{ height: 300 }}
-        image={img}
-        title="Filter"
-      />
-      <CardContent>
-        <Typography variant="h5" component="h1">
-          <SearchIcon fontSize="large" />
-          Filter the movies.
-          <br />
-        </Typography>
+      <CardContent sx={{ p: 3 }}>
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="h6" component="h4" sx={{ fontWeight: 600 }}>
+            <SearchIcon fontSize="small" sx={{ mr: 1, verticalAlign: "middle" }} />
+            Filter movies
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            Search by title or choose a genre.
+          </Typography>
+        </Box>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5, mt: 3 }}>
+          <TextField
+            sx={{...formControl}}
+            id="filled-search"
+            label="Movie title"
+            type="search"
+            variant="outlined"
+            value={props.titleFilter}
+            onChange={handleTextChange}
+          />
+          <FormControl sx={{...formControl}}>
+            <InputLabel id="genre-label">Genre</InputLabel>
+            <Select
+              labelId="genre-label"
+              id="genre-select"
+              label="Genre"
+              defaultValue=""
+              value={props.genreFilter}
+              onChange={handleGenreChange}
+            >
+              {genres.map((genre) => {
+                return (
+                  <MenuItem key={genre.id} value={genre.id}>
+                    {genre.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+          <FormControl sx={{...formControl}}>
+            <InputLabel id="country-label">Production country</InputLabel>
+            <Select
+              labelId="country-label"
+              id="country-select"
+              label="Production country"
+              defaultValue=""
+              value={props.countryFilter}
+              onChange={handleCountryChange}
+            >
+              {props.countries.map((country) => {
+                return (
+                  <MenuItem key={country.id} value={country.id}>
+                    {country.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Box>
       </CardContent>
     </Card>
   );
